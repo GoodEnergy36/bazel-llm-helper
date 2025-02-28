@@ -1,0 +1,77 @@
+/* Modal.css */
+.modal-overlay {
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background-color: rgba(0, 0, 0, 0.5);
+display: flex;
+justify-content: center;
+align-items: center;
+z-index: 1000;
+opacity: 0;
+visibility: hidden;
+transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.modal-overlay.active {
+opacity: 1;
+visibility: visible;
+}
+
+.modal {
+background-color: #424242;
+border-radius: 5px;
+padding: 20px;
+box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+max-width: 500px;
+width: 90%;
+transform: translateY(-20px);
+transition: transform 0.3s ease;
+position: relative;
+}
+
+.modal-overlay.active .modal {
+transform: translateY(0);
+}
+
+
+.modal-footer {
+display: flex;
+justify-content: flex-end;
+padding-top: 10px;
+}
+
+.modal-button {
+padding: 8px 16px;
+margin-right: 12px;
+border: none;
+border-radius: 4px;
+cursor: pointer;
+}
+
+.modal-button.primary {
+background-color: #4CAF50;
+color: white;
+}
+
+.modal-button.secondary {
+background-color: #f1f1f1;
+color: #333;
+}
+
+.api-input {
+    width: 512px;
+    height: 48px;
+    padding: 0 16px;
+    box-sizing: border-box;
+    border-radius: 4px;
+    border: 2px #1d1d1d solid;
+    font-size: larger;
+    margin-bottom: 12px;
+}
+
+.button-container {
+    padding: 0 16px;
+}

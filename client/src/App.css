@@ -1,0 +1,57 @@
+#root {
+  width: 100%;
+  height: 100vh;
+  box-sizing: border-box;
+}
+
+.App {
+  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.toolbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 54px;
+  background-color: #424242;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0 24px;
+  justify-content: space-between;
+  flex-shrink: 0;
+  width: 100%;
+  box-sizing: border-box;
+  z-index: 1;
+}
+
+.toolbar-buttons {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+}
+
+.chat {
+  margin-top: 54px;
+  width: 80%;
+  padding-bottom: 60px;
+}
+
+.MessageEnterBody {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  box-sizing: border-box;
+  position: fixed;
+  bottom: 8px;
+}
