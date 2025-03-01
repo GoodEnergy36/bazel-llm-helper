@@ -18,7 +18,7 @@ Ensure you have `python` installed. [python installation](https://www.python.org
 
 ### Instructions
 
-Once cloned onto your local machine, `cd` into this directory and run `npm install:all`.
+Once cloned onto your local machine, `cd` into this directory and run `npm run install:all`.
 
 When the installation process is complete, execute `npm run dev`.
 
