@@ -1,4 +1,3 @@
-// src/utils/storage.ts
 export interface Config {
   openaiKey: string;
 }

@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
 import './App.css';
-import { executeScript } from './utils/pythonExecutor';
-import { sendToChatGPT } from './utils/chatgpt';
-import { promptPrefix } from './utils/constant';
+import { executeScript } from '../../utils/pythonExecutor';
+import { sendToChatGPT } from '../../utils/chatgpt';
+import { promptPrefix } from '../../utils/constant';
 import ReactMarkdown from "react-markdown";
-import Modal from './components/Modal/Modal';
-import TargetEnter from './components/TargetEnter/TargetEnter';
+import Modal from '../Modal/Modal';
+import TargetEnter from '../TargetEnter/TargetEnter';
+import { storage } from '../../utils/storage';
 
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
   const [chatHistory, setChatHistory] = useState<Array<{ role: string; content: string }>>([]);
   const [userResponse, setUserResponse] = useState<string>('')
   let currentRequestController: AbortController | null = null;
+  const [errorList, serErrorList] = useState<Array<string>>([])
 
   useEffect(() => {
     if (bazelData) {
@@ -25,13 +27,18 @@ function App() {
   }, [bazelData])
 
   const analyzeBazelDeps = async () => {
+    serErrorList([])
+    const config = storage.getConfig();
+    if (!config.openaiKey) {
+      serErrorList((prev) => [...prev, 'OpenAI API key not configured']);
+    }
     if (!workspace) {
-      console.error('Workspace string is empty');
+      serErrorList((prev) => [...prev, 'Workspace string is empty']);
     }
     if (!sourceFile) {
-      console.error('Source File string is empty');
+      serErrorList((prev) => [...prev, 'Source File string is empty']);
     }
-    if (!workspace || !sourceFile) {
+    if (!workspace || !sourceFile || !config.openaiKey) {
       return
     }
     try {
@@ -131,6 +138,7 @@ function App() {
           analyzeBazelDeps={analyzeBazelDeps}
           isTargetEnterActive={true}
           isLoading={isLoading}
+          errorList={errorList}
         />
       }
 
@@ -139,9 +147,12 @@ function App() {
           <div className='chat'>
             {chatHistory.map((entry, index) => 
               index > 0 ? (
-                <ReactMarkdown key={index}>
-                  {entry.content}
-                </ReactMarkdown>
+                <>
+                  <h3>{(entry.role == "assistant") ? "ChatGPT" : "You"}</h3>
+                  <ReactMarkdown key={index}>
+                    {entry.content}
+                  </ReactMarkdown>
+                </>
               ) : null
             )}
           </div>
@@ -159,7 +170,6 @@ function App() {
           </form>
         </>
       )}
-
     </div>
   );
 }

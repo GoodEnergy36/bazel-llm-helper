@@ -22,6 +22,7 @@ const Modal: React.FC<ModalProps> = ({ isModalActive, setIsModalActive }) => {
     } catch (error) {
       console.log('Error saving key');
     }
+    setIsModalActive(false)
   };
   
   if (!isModalActive) return null;
@@ -29,17 +30,19 @@ const Modal: React.FC<ModalProps> = ({ isModalActive, setIsModalActive }) => {
   return (
     <div className={`modal-overlay ${isModalActive ? 'active' : ''}`}>
       <div className="modal">
-        <div className="space-y-4">
+        <div>
           <input
             type="password"
             value={apiKey}
             onChange={(e) => setApiKey(e.target.value)}
-            className="api-input"
+            className="key-input-width"
             placeholder="Enter OpenAI API Key"
           />
         </div>
-        <button className="modal-button secondary" onClick={() => setIsModalActive(false)}>Cancel</button>
-        <button className="modal-button primary" onClick={handleSave}>Confirm</button>
+        <div className='modal-button-container'>
+          <button onClick={() => setIsModalActive(false)}>Cancel</button>
+          <button onClick={handleSave}>Confirm</button>
+        </div>
       </div>
     </div>
   );

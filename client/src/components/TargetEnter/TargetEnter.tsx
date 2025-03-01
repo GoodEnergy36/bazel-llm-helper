@@ -9,9 +9,10 @@ interface TargetEnterProps {
     setWorkspace: React.Dispatch<React.SetStateAction<string>>;
     setSourceFile: React.Dispatch<React.SetStateAction<string>>;
     isLoading: boolean;
+    errorList: Array<string>;
 }
 
-const TargetEnter: React.FC<TargetEnterProps> = ({isTargetEnterActive, analyzeBazelDeps, workspace, sourceFile, setWorkspace, setSourceFile, isLoading}) => {
+const TargetEnter: React.FC<TargetEnterProps> = ({isTargetEnterActive, analyzeBazelDeps, workspace, sourceFile, setWorkspace, setSourceFile, isLoading, errorList}) => {
 
   const [count, setCount] = useState(1);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
@@ -39,14 +40,14 @@ const TargetEnter: React.FC<TargetEnterProps> = ({isTargetEnterActive, analyzeBa
             type="text"
             value={workspace}
             onChange={(e) => setWorkspace(e.target.value)}
-            className="api-input"
+            className="api-input-width"
             placeholder="Enter OpenAI API Key"
         />
         <input
             type="text"
             value={sourceFile}
             onChange={(e) => setSourceFile(e.target.value)}
-            className="api-input"
+            className="api-input-width"
             placeholder="Enter OpenAI API Key"
         />
         <button
@@ -57,6 +58,11 @@ const TargetEnter: React.FC<TargetEnterProps> = ({isTargetEnterActive, analyzeBa
         {isLoading &&
             <div className='loader'>{Array(count).fill('.')}</div>
         }
+        {errorList && (
+          errorList.map((element, index) => (
+            <div key={index}>{element}</div>
+          ))
+        )}
     </div>
   )
 };

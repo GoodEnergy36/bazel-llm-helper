@@ -42,9 +42,6 @@ def analyze_target(workspace_root: str, target: str, visited_src: Set, visited_l
                 visited_lib.add(cquery_target)
                 if cquery_target != target:
                     libs_to_search.append(cquery_target)
-        
-        with open(os.path.expanduser("~/Desktop/temp.txt"), "a") as f:
-            f.write(str(current_target))
             
         for lib in libs_to_search:
             current_target["dependent_libraries"][lib] = analyze_target(workspace_root, lib, visited_src, visited_lib)
