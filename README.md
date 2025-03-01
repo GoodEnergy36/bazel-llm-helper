@@ -7,7 +7,7 @@ A script is executed that recursively identifyies libraries and source code file
 creates a json object that contains those libraries and the contents of the dependent source files, sends it to an LLM (OpenAI) which analyses the json object,
 waits for a repsonse, prints the markdown response to the user where the user can continue the conversation with the LLM via a text box at the bottom.
 
-## instructions
+## Instructions
 
 Ensure you have `npm` installed. [nodejs installation guide](https://nodejs.org/en/download/)
 
