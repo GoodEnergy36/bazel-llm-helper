@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import './App.css';
 import { executeScript } from '../../utils/pythonExecutor';
 import { sendToChatGPT } from '../../utils/chatgpt';
@@ -12,19 +12,45 @@ import { storage } from '../../utils/storage';
 function App() {
   const [isModalActive, setIsModalActive] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false)
-  const [workspace, setWorkspace] = useState("/Users/samtowney/Desktop/code/rules_python");
-  const [sourceFile, setSourceFile] = useState("//tools/private/update_deps:args");
+  const [workspace, setWorkspace] = useState("");
+  const [sourceFile, setSourceFile] = useState("");
   const [bazelData, setBazelData] = useState<string | undefined>(undefined);
   const [chatHistory, setChatHistory] = useState<Array<{ role: string; content: string }>>([]);
   const [userResponse, setUserResponse] = useState<string>('')
-  let currentRequestController: AbortController | null = null;
+  const [count, setCount] = useState(0);
   const [errorList, serErrorList] = useState<Array<string>>([])
+
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
+
+  let currentRequestController: AbortController | null = null;
+  
+  useEffect(() => {
+    if (isLoading) {
+      timerRef.current = setInterval(() => {
+        setCount(prev => (prev + 1) % 4);
+      }, 1000);
+    }
+    
+    return () => {
+      if (timerRef.current) {
+        clearInterval(timerRef.current)
+        setCount(0)
+      };
+    };
+  }, [isLoading]);
 
   useEffect(() => {
     if (bazelData) {
       handleCommand(promptPrefix + bazelData)
     }
   }, [bazelData])
+
+  useEffect(() => {
+    if (chatHistory.length > 2) {
+      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [chatHistory]);
 
   const analyzeBazelDeps = async () => {
     serErrorList([])
@@ -137,7 +163,7 @@ function App() {
           sourceFile={sourceFile}
           analyzeBazelDeps={analyzeBazelDeps}
           isTargetEnterActive={true}
-          isLoading={isLoading}
+          count={count}
           errorList={errorList}
         />
       }
@@ -155,6 +181,9 @@ function App() {
                 </>
               ) : null
             )}
+            {isLoading && (
+              <div className='loader'>{Array(count).fill('.')}</div>
+            )}
           </div>
           <form 
             className='MessageEnterBody'
@@ -170,6 +199,7 @@ function App() {
           </form>
         </>
       )}
+      <div ref={messagesEndRef} />
     </div>
   );
 }

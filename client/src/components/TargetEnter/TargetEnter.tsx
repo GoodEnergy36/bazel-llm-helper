@@ -1,4 +1,3 @@
-import React, { useState, useEffect, useRef } from 'react';
 import './TargetEnter.css';
 
 interface TargetEnterProps {
@@ -8,29 +7,11 @@ interface TargetEnterProps {
     sourceFile: string;
     setWorkspace: React.Dispatch<React.SetStateAction<string>>;
     setSourceFile: React.Dispatch<React.SetStateAction<string>>;
-    isLoading: boolean;
+    count: number;
     errorList: Array<string>;
 }
 
-const TargetEnter: React.FC<TargetEnterProps> = ({isTargetEnterActive, analyzeBazelDeps, workspace, sourceFile, setWorkspace, setSourceFile, isLoading, errorList}) => {
-
-  const [count, setCount] = useState(1);
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
-  
-  useEffect(() => {
-    if (isLoading) {
-      timerRef.current = setInterval(() => {
-        setCount(prev => (prev + 1) % 4);
-      }, 1000);
-    }
-    
-    return () => {
-      if (timerRef.current) {
-        clearInterval(timerRef.current)
-        setCount(1)
-      };
-    };
-  }, [isLoading]);
+const TargetEnter: React.FC<TargetEnterProps> = ({isTargetEnterActive, analyzeBazelDeps, workspace, sourceFile, setWorkspace, setSourceFile, count, errorList}) => {
 
   if (!isTargetEnterActive) return null;
   
@@ -55,9 +36,7 @@ const TargetEnter: React.FC<TargetEnterProps> = ({isTargetEnterActive, analyzeBa
         >
             Analyse target
         </button>
-        {isLoading &&
-            <div className='loader'>{Array(count).fill('.')}</div>
-        }
+        <div className='loader'>{Array(count).fill('.')}</div>
         {errorList && (
           errorList.map((element, index) => (
             <div key={index}>{element}</div>
