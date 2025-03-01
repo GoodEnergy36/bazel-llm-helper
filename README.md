@@ -32,6 +32,8 @@ This will require you have your own OpenAI API key with credits available. ([mor
 
 This program makes calls to Open AI's `gpt-4.5-preview` model. It is really powerful but it's slow and expensive as fuck. If you'd like to switch some performace for speed, in `server/src/routes/api.chat.ts`, `gpt-4.5-preview` can be switched for any of the models found [here](https://platform.openai.com/docs/models#gpt-4o).
 
+This system has a context window, limiting the amound of code that can be passed into a conversation. I didn't reach that in my usage, but from what I understand, several thousand lines of code should be able to be passed through.
+
 ## Bazel Scope: Technical Documentation
 
 Bazel Scope is a full-stack web application that helps developers analyze and understand Bazel dependency trees for their projects. The application provides an intuitive interface for users to specify Bazel targets, analyzes the dependencies using a custom Python script, and leverages an AI-powered assistant (OpenAI's ChatGPT) to generate comprehensive documentation about the codebase structure, components, and dependencies. The system consists of a React frontend and an Express.js backend that executes Python scripts for Bazel dependency analysis.
