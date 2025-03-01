@@ -9,9 +9,15 @@ interface ChatGPTParams {
   messages: ChatMessage[];
 }
 
-export const sendToChatGPT = async (params: ChatGPTParams): Promise<string> => {
+interface ChatGPTResponse {
+  response: string;
+}
+
+export const sendToChatGPT = async (
+  params: ChatGPTParams, 
+  abortSignal?: AbortSignal
+): Promise<string> => {
   const config = storage.getConfig();
-  
   if (!config.openaiKey) {
     throw new Error('OpenAI API key not configured');
   }
@@ -23,12 +29,13 @@ export const sendToChatGPT = async (params: ChatGPTParams): Promise<string> => {
       'x-api-key': config.openaiKey,
     },
     body: JSON.stringify(params),
+    signal: abortSignal, // Add the AbortSignal here
   });
 
   if (!response.ok) {
     throw new Error('Failed to communicate with ChatGPT');
   }
 
-  const data = await response.json();
+  const data = await response.json() as ChatGPTResponse;
   return data.response;
 };

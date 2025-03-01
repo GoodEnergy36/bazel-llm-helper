@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Dispatch, SetStateAction } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './TargetEnter.css';
 
 interface TargetEnterProps {
@@ -12,6 +12,24 @@ interface TargetEnterProps {
 }
 
 const TargetEnter: React.FC<TargetEnterProps> = ({isTargetEnterActive, analyzeBazelDeps, workspace, sourceFile, setWorkspace, setSourceFile, isLoading}) => {
+
+  const [count, setCount] = useState(1);
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
+  
+  useEffect(() => {
+    if (isLoading) {
+      timerRef.current = setInterval(() => {
+        setCount(prev => (prev + 1) % 4);
+      }, 1000);
+    }
+    
+    return () => {
+      if (timerRef.current) {
+        clearInterval(timerRef.current)
+        setCount(1)
+      };
+    };
+  }, [isLoading]);
 
   if (!isTargetEnterActive) return null;
   
@@ -37,9 +55,7 @@ const TargetEnter: React.FC<TargetEnterProps> = ({isTargetEnterActive, analyzeBa
             Analyse target
         </button>
         {isLoading &&
-            <div>
-                Loading
-            </div>
+            <div className='loader'>{Array(count).fill('.')}</div>
         }
     </div>
   )

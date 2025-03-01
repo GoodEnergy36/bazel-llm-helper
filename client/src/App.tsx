@@ -16,6 +16,7 @@ function App() {
   const [bazelData, setBazelData] = useState<string | undefined>(undefined);
   const [chatHistory, setChatHistory] = useState<Array<{ role: string; content: string }>>([]);
   const [userResponse, setUserResponse] = useState<string>('')
+  let currentRequestController: AbortController | null = null;
 
   useEffect(() => {
     if (bazelData) {
@@ -47,24 +48,45 @@ function App() {
   const handleCommand = async (command: string) => {
     setChatHistory(prev => [...prev, { role: 'user', content: command }]);
     setIsLoading(true);
+
+    // Create a new controller for this request
+    currentRequestController = new AbortController();
+    const { signal } = currentRequestController;
+
     try {
-      const response = await sendToChatGPT({
-        messages: [
-          {
-            role: 'system',
-            content: JSON.stringify(bazelData),
-          },
-          ...chatHistory,
-          { role: 'user', content: command },
-        ],
-      });
-  
+      const response = await sendToChatGPT(
+        {
+          messages: [
+            {
+              role: 'system',
+              content: JSON.stringify(bazelData),
+            },
+            ...chatHistory,
+            { role: 'user', content: command },
+          ],
+        },
+        signal
+      );
       setChatHistory(prev => [...prev, { role: 'assistant', content: response }]);
     } catch (error) {
       console.error('Chat error:', error);
     } finally {
+      // Clear the controller reference and loading state
+      if (currentRequestController?.signal === signal) {
+        currentRequestController = null;
+      }
       setIsLoading(false);
     }
+  };
+
+  const cancelCurrentRequest = () => {
+    if (currentRequestController) {
+      currentRequestController.abort();
+      currentRequestController = null;
+    }
+    setIsLoading(false);
+    setChatHistory([])
+    setBazelData(undefined)
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -74,6 +96,7 @@ function App() {
       setUserResponse('');
     }
   };
+
 
   return (
     <div className="App">
@@ -92,7 +115,8 @@ function App() {
             Enter API key
           </button>
           <button
-            disabled
+            disabled={chatHistory.length < 1}
+            onClick={cancelCurrentRequest}
           >
             Start new Analysis
           </button>
@@ -129,7 +153,7 @@ function App() {
               type="text"
               value={userResponse}
               onChange={(e) => setUserResponse(e.target.value)}
-              className="api-input"
+              className="response-input"
               placeholder="Enter a command..."
             />
           </form>

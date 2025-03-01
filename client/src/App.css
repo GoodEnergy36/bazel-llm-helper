@@ -51,7 +51,6 @@
   display: flex;
   align-items: center;
   flex-direction: column;
-  box-sizing: border-box;
   position: fixed;
   bottom: 8px;
 }
