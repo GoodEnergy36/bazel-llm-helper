@@ -28,7 +28,7 @@ If all goes well, bazel scope should be running on [http://localhost:5173/](http
 
 I would've used NextJS for this but it doesn't work with the package `react-markdown`.
 
-This will require you have your own OpenAI API key with credits available. 
+This will require you have your own OpenAI API key with credits available. ([more info here](https://platform.openai.com/docs/overview))
 
 This program makes calls to Open AI's `gpt-4.5-preview` model. It is really powerful but it's slow and expensive as fuck. If you'd like to switch some performace for speed, in `server/src/routes/api.chat.ts`, `gpt-4.5-preview` can be switched for any of the models found [here](https://platform.openai.com/docs/models#gpt-4o).
 
