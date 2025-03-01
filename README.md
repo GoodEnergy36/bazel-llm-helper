@@ -174,7 +174,7 @@ A Python script that analyzes Bazel targets to extract dependency information an
      - Returns a structured JSON representation of the dependency tree
    - Backend captures the script output and returns it to the frontend
 
-  (More information anout this script can be found at)
+   (More information anout this script can be found at)
 
 4. **Documentation Generation Phase**
    - Frontend adds the Bazel dependency data to the system message for ChatGPT
