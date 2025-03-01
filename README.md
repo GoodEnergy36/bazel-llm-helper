@@ -30,7 +30,7 @@ I would've used NextJS for this but it doesn't work with the package `react-mark
 
 This will require you have your own OpenAI API key with credits available. 
 
-This program makes calls to Open AI's `gpt-4.5-preview` model. It is really powerful but it's slow as fuck. If you'd like to switch some performace for speed, in `server/src/routes/api.chat.ts`, `gpt-4.5-preview` can be switched for any of the models found [here](https://platform.openai.com/docs/models#gpt-4o).
+This program makes calls to Open AI's `gpt-4.5-preview` model. It is really powerful but it's slow and expensive as fuck. If you'd like to switch some performace for speed, in `server/src/routes/api.chat.ts`, `gpt-4.5-preview` can be switched for any of the models found [here](https://platform.openai.com/docs/models#gpt-4o).
 
 ## Bazel Scope: Technical Documentation
 
